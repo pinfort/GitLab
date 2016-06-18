@@ -23,7 +23,7 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase('https://gitlab.com/oauth/authorize', $state);
+        return $this->buildAuthUrlFromBase($this->getInstanceUri().'oauth/authorize', $state);
     }
 
     /**
@@ -31,7 +31,7 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return 'https://gitlab.com/oauth/token';
+        return $this->getInstanceUri().'oauth/token';
     }
 
     /**
@@ -39,7 +39,7 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get('https://gitlab.com/api/v3/user', [
+        $response = $this->getHttpClient()->get($this->getInstanceUri().'api/v3/user', [
             'headers' => [
                 'Authorization' => 'Bearer '.$token,
             ],
@@ -70,5 +70,21 @@ class Provider extends AbstractProvider implements ProviderInterface
         return array_merge(parent::getTokenFields($code), [
             'grant_type' => 'authorization_code'
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInstanceUri()
+    {
+        return $this->getConfig('instance_uri', 'https://gitlab.com/');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function additionalConfigKeys()
+    {
+        return ['instance_uri'];
     }
 }
