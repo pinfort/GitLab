@@ -1,5 +1,5 @@
 {
-    "name": "socialiteproviders/gitlab",
+    "name": "pinfort/gitlab",
     "description": "GitLab OAuth2 Provider for Laravel Socialite",
     "license": "MIT",
     "authors": [{
